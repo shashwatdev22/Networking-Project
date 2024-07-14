@@ -1,0 +1,33 @@
+/* Custom styles for the network monitoring dashboard */
+
+#graph-container {
+    height: 600px;
+}
+
+.log-container {
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.navbar-nav .nav-item {
+    margin-right: 10px;
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+.badge {
+    font-size: 14px;
+    padding: 8px;
+}
+
+.list-group-item {
+    padding: 10px;
+    margin-bottom: 5px;
+}

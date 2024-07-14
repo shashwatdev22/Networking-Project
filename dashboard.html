@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Network Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Network Dashboard</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Ping Results</h3>
+            </div>
+            <div class="card-body">
+                <table class="table" id="pingResultsTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Device</th>
+                            <th scope="col">Ping</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Network Topology</h3>
+            </div>
+            <div class="card-body">
+                <div id="networkTopology">Loading network topology...</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Performance Metrics</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group" id="performanceMetricsList">
+                    <!-- Performance metrics will be populated here dynamically -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Logs</h3>
+            </div>
+            <div class="card-body">
+                <ul class="list-group" id="logsList">
+                    <!-- Logs will be populated here dynamically -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function fetchPingResults() {
+            console.log('Fetching ping results...');
+            $.ajax({
+                url: '/fetch_ping_results',
+                type: 'GET',
+                success: function(data) {
+                    console.log('Ping results received:', data);
+                    displayPingResults(data);
+                },
+                error: function(error) {
+                    console.error('Error fetching ping results:', error);
+                }
+            });
+        }
+
+        function displayPingResults(data) {
+            var tableContent = '';
+            for (var ip in data) {
+                tableContent += '<tr>';
+                tableContent += '<td>' + ip + '</td>';
+                tableContent += '<td>' + data[ip].ping + '</td>';
+                tableContent += '<td>' + (data[ip].status === 'Up' ? '<span class="badge badge-success">Up</span>' : '<span class="badge badge-danger">Down</span>') + '</td>';
+                tableContent += '</tr>';
+            }
+            $('#pingResultsTable tbody').html(tableContent);
+        }
+
+        function fetchPerformanceMetrics() {
+            console.log('Fetching performance metrics...');
+            $.ajax({
+                url: '/fetch_performance_metrics',
+                type: 'GET',
+                success: function(data) {
+                    console.log('Performance metrics received:', data);
+                    displayPerformanceMetrics(data);
+                },
+                error: function(error) {
+                    console.error('Error fetching performance metrics:', error);
+                }
+            });
+        }
+
+        function displayPerformanceMetrics(data) {
+            var listContent = '';
+            for (var metric in data) {
+                listContent += '<li class="list-group-item d-flex justify-content-between align-items-center">' + metric + '<span class="badge badge-primary badge-pill">' + data[metric] + '</span></li>';
+            }
+            $('#performanceMetricsList').html(listContent);
+        }
+
+        function fetchLogs() {
+            console.log('Fetching logs...');
+            $.ajax({
+                url: '/fetch_logs',
+                type: 'GET',
+                success: function(data) {
+                    console.log('Logs received:', data);
+                    displayLogs(data);
+                },
+                error: function(error) {
+                    console.error('Error fetching logs:', error);
+                }
+            });
+        }
+
+        function displayLogs(data) {
+            var listContent = '';
+            for (var i = 0; i < data.length; i++) {
+                listContent += '<li class="list-group-item">' + data[i] + '</li>';
+            }
+            $('#logsList').html(listContent);
+        }
+
+        $(document).ready(function() {
+            fetchPingResults();
+            fetchPerformanceMetrics();
+            fetchLogs();
+
+            var socket = io();
+            socket.on('network_data_update', function(data) {
+                console.log('Received network data update:', data);
+                // Handle network data update here (if needed)
+            });
+        });
+    </script>
+</body>
+</html>

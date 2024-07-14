@@ -1,0 +1,9 @@
+2024-07-12 11:20:43,588 - INFO -  * Restarting with stat
+2024-07-12 11:20:44,909 - WARNING -  * Debugger is active!
+2024-07-12 11:20:44,914 - INFO -  * Debugger PIN: 106-166-063
+2024-07-12 11:22:56,577 - INFO -  * Restarting with stat
+2024-07-12 11:22:57,808 - WARNING -  * Debugger is active!
+2024-07-12 11:22:57,832 - INFO -  * Debugger PIN: 106-166-063
+2024-07-12 11:28:49,697 - INFO -  * Restarting with stat
+2024-07-12 11:28:51,000 - WARNING -  * Debugger is active!
+2024-07-12 11:28:51,006 - INFO -  * Debugger PIN: 106-166-063
